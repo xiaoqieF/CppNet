@@ -8,6 +8,7 @@
 namespace CppNet {
     namespace CurrentThread {
         extern __thread int t_cachedTid;
+        extern __thread char t_tidString[32];
 
         void cacheTid();
 
@@ -16,6 +17,10 @@ namespace CppNet {
                 cacheTid();
             }
             return t_cachedTid;
+        }
+
+        inline const char* tidString() {
+            return t_tidString;
         }
     }
 }

@@ -6,6 +6,9 @@
 #define CPPNET_LOGGING_H
 
 #include <cstring>
+#include <memory>
+
+#include "logger/LogStream.h"
 
 namespace CppNet {
     class SourceFile {
@@ -17,6 +20,8 @@ namespace CppNet {
             }
             size_ = static_cast<int>(strlen(data_));
         }
+        const char* data() const { return data_; }
+        int size() const { return size_; }
 
     private:
         const char* data_;
@@ -35,9 +40,32 @@ namespace CppNet {
             NUM_LOG_LEVELS,
         };
 
-    private:
+        Logger(const char* file, int line);
+        Logger(const char* file, int line, LogLevel level);
+        Logger(const char* file, int line, LogLevel level, const char* funcName);
+        ~Logger();
+        LogStream& stream();
 
+    public:
+        static LogLevel logLevel() { return g_logLevel; }
+        static void setLogLevel(LogLevel level) { g_logLevel = level; }
+
+        typedef void (*OutputFunc)(const char* msg, int len);
+        typedef void (*FlushFunc)();
+        static void setOutput(OutputFunc o) { g_output = o; }
+        static void setFlush(FlushFunc f) { g_flush = f; }
+
+    private:
+        static LogLevel g_logLevel;
+        static OutputFunc g_output;
+        static FlushFunc g_flush;
+
+        class Impl;
+        std::unique_ptr<Impl> impl;
     };
+
+#define LOG_TRACE if(CppNet::Logger::logLevel() <= CppNet::Logger::TRACE) \
+    CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::TRACE, __func__).stream()
 }
 
 
