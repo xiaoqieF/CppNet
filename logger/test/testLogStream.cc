@@ -1,6 +1,6 @@
 //
 // Created by fxd on 23-4-6.
-//
+// LogStream 的单元测试
 #include <gtest/gtest.h>
 #include "logger/FixedBuffer.h"
 #include "logger/LogStream.h"

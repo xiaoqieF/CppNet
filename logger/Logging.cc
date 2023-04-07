@@ -62,7 +62,7 @@ namespace CppNet {
         if (seconds != t_lastSecond) {
             t_lastSecond = seconds;
             struct tm t;
-            ::gmtime_r(&seconds, &t);
+            ::localtime_r(&seconds, &t);
 
             int len = snprintf(t_time, sizeof(t_time), "%4d%02d%02d %02d:%02d:%02d",
                                t.tm_year + 1900,

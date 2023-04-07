@@ -62,6 +62,7 @@ namespace CppNet {
         class Impl;
         std::unique_ptr<Impl> impl;
     };
+    const char* strerror_tl(int savedErrno);
 
 #define LOG_TRACE if(CppNet::Logger::logLevel() <= CppNet::Logger::TRACE) \
     CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::TRACE).stream()

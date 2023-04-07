@@ -1,10 +1,13 @@
-set(log_src FixedBuffer.h LogStream.cc Logging.cc)
+set(log_src FixedBuffer.h LogStream.cc Logging.cc LogFile.cc)
 
 add_library(logger ${log_src})
 set_target_properties(logger PROPERTIES LINKER_LANGUAGE CXX)
 
-add_executable(logger_test1 test/test1.cc)
-target_link_libraries(logger_test1 logger gtest gmock pthread)
+add_executable(testLogStream test/testLogStream.cc)
+target_link_libraries(testLogStream logger gtest gmock pthread)
 
-add_executable(logger_test2 test/test2.cc)
-target_link_libraries(logger_test2 logger gtest gmock pthread base)
+add_executable(testLogging test/testLogging.cc)
+target_link_libraries(testLogging logger gtest gmock pthread base)
+
+add_executable(testLogFile test/testLogFile.cc)
+target_link_libraries(testLogFile logger base)
