@@ -13,12 +13,12 @@ namespace CppNet {
     __thread time_t t_lastSecond;
 
     const char* LogLevelName[Logger::NUM_LOG_LEVELS] = {
-            "TRACE ",
-            "DEBUG ",
-            "INFO  ",
-            "WARN  ",
-            "ERROR ",
-            "FATAL ",
+            "[TRACE] ",
+            "[DEBUG] ",
+            "[INFO ] ",
+            "[WARN ] ",
+            "[ERROR] ",
+            "[FATAL] ",
     };
     const char* strerror_tl(int savedErrno) {
         return strerror_r(savedErrno, t_errnoBuf, sizeof(t_errnoBuf));
@@ -37,14 +37,15 @@ namespace CppNet {
             formatTime();
             CurrentThread::tid();
             stream_.append(CurrentThread::tidString(), 6);
-            stream_.append(LogLevelName[level], 6);
+            stream_.append(LogLevelName[level], 8);
             if (old_errno != 0) {
                 stream_ << strerror_tl(old_errno) << " (errno=" << old_errno << ") ";
             }
+            stream_.append(basename_.data(), basename_.size());
+            stream_ << ':' << line_ << " - ";
         }
 
         void formatTime();
-        void finish();
 
         Timestamp time_;
         LogStream stream_;
@@ -78,15 +79,9 @@ namespace CppNet {
         stream_.append(us.data(), 9);
     }
 
-    void Logger::Impl::finish() {
-        stream_ << " - ";
-        stream_.append(basename_.data(), basename_.size());
-        stream_ << ":" << line_ << '\n';
-    }
-
     Logger::LogLevel Logger::g_logLevel = INFO;
     Logger::OutputFunc Logger::g_output = [](const char* msg, int len) {
-        fwrite(msg, 1, len, stdout);
+        fwrite(msg, 1, len, stdout);   // ok, thread safe
     };
     Logger::FlushFunc Logger::g_flush = []() {
         fflush(stdout);
@@ -98,15 +93,11 @@ namespace CppNet {
     Logger::Logger(const char* file, int line, Logger::LogLevel level)
         : impl(new Impl(level, 0, file, line)) {}
 
-    Logger::Logger(const char* file, int line, Logger::LogLevel level, const char *func)
-        : impl(new Impl(level, 0, file, line)) {
-        impl->stream_ << func << ' ';
-    }
     LogStream &Logger::stream() {
         return impl->stream_;
     }
     Logger::~Logger() {
-        impl->finish();
+        stream() << '\n';
         const LogStream::Buffer & buffer = impl->stream_.buffer();
         g_output(buffer.data(), buffer.length());
         if (impl->level_ == FATAL) {

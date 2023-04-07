@@ -42,7 +42,6 @@ namespace CppNet {
 
         Logger(const char* file, int line);
         Logger(const char* file, int line, LogLevel level);
-        Logger(const char* file, int line, LogLevel level, const char* funcName);
         ~Logger();
         LogStream& stream();
 
@@ -65,7 +64,15 @@ namespace CppNet {
     };
 
 #define LOG_TRACE if(CppNet::Logger::logLevel() <= CppNet::Logger::TRACE) \
-    CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::TRACE, __func__).stream()
+    CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::TRACE).stream()
+#define LOG_DEBUG if(CppNet::Logger::logLevel() <= CppNet::Logger::DEBUG) \
+    CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::DEBUG).stream()
+#define LOG_INFO if(CppNet::Logger::logLevel() <= CppNet::Logger::INFO) \
+    CppNet::Logger(__FILE__, __LINE__).stream()
+#define LOG_WARN CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::WARN).stream()
+#define LOG_ERROR CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::ERROR).stream()
+#define LOG_FATAL CppNet::Logger(__FILE__, __LINE__, CppNet::Logger::FATAL).stream()
+
 }
 
 
