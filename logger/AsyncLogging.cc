@@ -83,8 +83,8 @@ namespace CppNet {
                 buffersToWrite.pop_back();
                 newBuffer1->reset();   // reset newBuffer1
             }
-
             if (!newBuffer2) {
+                // 说明 newBuffer2 给了 nextBuffer_, buffersToWrite 必然还有 1 个 buffer
                 newBuffer2 = std::move(buffersToWrite.back());
                 buffersToWrite.pop_back();
                 newBuffer2->reset();
