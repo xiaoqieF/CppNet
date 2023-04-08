@@ -12,12 +12,12 @@ namespace CppNet {
     namespace CurrentThread {
         __thread int t_cachedTid = 0;
         __thread char t_tidString[32];
+        __thread int t_tidLen = 0;     // length of t_tidString
 
         void cacheTid() {
             if (t_cachedTid == 0) {
                 t_cachedTid = static_cast<pid_t>(::syscall(SYS_gettid));
-                int n = snprintf(t_tidString, sizeof(t_tidString), "%5d ", t_cachedTid);
-                assert(n == 6);
+                t_tidLen = snprintf(t_tidString, sizeof(t_tidString), "%5d ", t_cachedTid);
             }
         }
     }

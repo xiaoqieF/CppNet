@@ -1,4 +1,4 @@
-set(log_src FixedBuffer.h LogStream.cc Logging.cc LogFile.cc)
+set(log_src FixedBuffer.h LogStream.cc Logging.cc LogFile.cc AsyncLogging.cc)
 
 add_library(logger ${log_src})
 set_target_properties(logger PROPERTIES LINKER_LANGUAGE CXX)
@@ -11,3 +11,6 @@ target_link_libraries(testLogging logger gtest gmock pthread base)
 
 add_executable(testLogFile test/testLogFile.cc)
 target_link_libraries(testLogFile logger base)
+
+add_executable(testAsyncLog test/testAsyncLog.cc)
+target_link_libraries(testAsyncLog logger base)

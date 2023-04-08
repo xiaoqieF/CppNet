@@ -22,11 +22,11 @@ namespace CppNet {
         ~LogFile();
 
         void append(const char* logLine, int len);
-        void rollFile();
         void flush();
 
     private:
         static std::string getLogFilename(const std::string& basename, time_t* now);
+        void rollFile();
 
         const std::string basename_;
         const size_t rollSize_;

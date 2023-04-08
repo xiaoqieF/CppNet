@@ -36,7 +36,7 @@ namespace CppNet {
         {
             formatTime();
             CurrentThread::tid();
-            stream_.append(CurrentThread::tidString(), 6);
+            stream_.append(CurrentThread::tidString(), CurrentThread::t_tidLen);
             stream_.append(LogLevelName[level], 8);
             if (old_errno != 0) {
                 stream_ << strerror_tl(old_errno) << " (errno=" << old_errno << ") ";

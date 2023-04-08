@@ -3,9 +3,11 @@
 //
 #include <iostream>
 #include <thread>
+#include <memory>
 
 #include "logger/Logging.h"
 #include "base/CurrentThread.h"
+#include "logger/FixedBuffer.h"
 
 void threadFunc() {
     for (int i=0; i<10; ++i) {
@@ -15,6 +17,13 @@ void threadFunc() {
 }
 
 int main() {
+    typedef CppNet::detail::FixedBuffer<CppNet::detail::kLargeBuffer> Buffer;
+    std::unique_ptr<Buffer> buffer = std::make_unique<Buffer>();
+    auto buffer1 = std::move(buffer);
+    if (buffer == nullptr) {
+        LOG_INFO << "buffer is now nullptr";
+    }
+
     CppNet::Logger::setLogLevel(CppNet::Logger::TRACE);
 
     std::thread t(threadFunc);
