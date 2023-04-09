@@ -8,6 +8,7 @@
 namespace CppNet {
     const char digits[] = "9876543210123456789";
     const char* zero = digits + 9;
+    const char digitsHex[] = "0123456789abcdef";
 
     // 数字转换为字符串
     template<typename T>
@@ -27,6 +28,21 @@ namespace CppNet {
         *p = '\0';
         std::reverse(buf, p);
 
+        return p - buf;
+    }
+
+    size_t convertHex(char buf[], uintptr_t value) {
+        uintptr_t i = value;
+        char* p = buf;
+
+        do {
+            size_t lsd = i % 16;
+            i /= 16;
+            *p++ = digitsHex[lsd];
+        } while (i != 0);
+
+        *p = '\0';
+        std::reverse(buf, p);
         return p - buf;
     }
 
@@ -79,6 +95,18 @@ namespace CppNet {
         if (buffer_.avail() >= kMaxNumericSize) {
             int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v);
             buffer_.add(len);
+        }
+        return *this;
+    }
+
+    LogStream::self &LogStream::operator<<(const void* p) {
+        auto v = reinterpret_cast<uintptr_t>(p);
+        if (buffer_.avail() >= kMaxNumericSize) {
+            char* buf = buffer_.current();
+            buf[0] = '0';
+            buf[1] = 'x';
+            size_t len = convertHex(buf + 2, v);
+            buffer_.add(len + 2);
         }
         return *this;
     }

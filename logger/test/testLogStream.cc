@@ -170,6 +170,15 @@ TEST(LogStreamTest, testString) {
     EXPECT_EQ(buf.toString(), "hello ...");
 }
 
+TEST(LogStreamTest, testPtr) {
+    CppNet::LogStream os;
+    const auto& buf = os.buffer();
+    char str[32];
+    snprintf(str, 32, "%p", &os);
+    os << &os;
+    EXPECT_EQ(buf.toString(), str);
+}
+
 TEST(LogStreamTest, testFmt) {
     CppNet::LogStream os;
     const auto& buf = os.buffer();

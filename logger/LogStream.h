@@ -38,6 +38,7 @@ namespace CppNet {
             buffer_.append(v, strlen(v));
             return *this;
         }
+        self& operator<<(const void* v);
         self& operator<<(const std::string& v) {
             buffer_.append(v.c_str(), v.size());
             return *this;
@@ -55,7 +56,7 @@ namespace CppNet {
     private:
         static const int kMaxNumericSize = 48;
         template<typename T>
-        void formatInteger(T);  // 这里模板实现不在头文件可以，应该是没有其他类外部的访问
+        void formatInteger(T);  // 这里模板实现不在头文件可以，应该是因为没有其他类外部的访问
         Buffer buffer_;
     };
 

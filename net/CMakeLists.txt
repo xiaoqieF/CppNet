@@ -1,4 +1,4 @@
-set(net_src Socket.cc InetAddress.cc Buffer.cc)
+set(net_src Socket.cc InetAddress.cc Buffer.cc EventLoop.cc)
 
 add_library(net ${net_src})
 target_link_libraries(net logger base)
@@ -8,3 +8,6 @@ target_link_libraries(testInetAddress net gtest gmock pthread)
 
 add_executable(testBuffer test/testBuffer.cc)
 target_link_libraries(testBuffer net gtest gmock pthread)
+
+add_executable(testEventLoop test/testEventLoop.cc)
+target_link_libraries(testEventLoop net)
