@@ -2,6 +2,7 @@
 // Created by fxd on 23-4-9.
 //
 
+#include <cassert>
 #include "EventLoop.h"
 #include "logger/Logging.h"
 
@@ -47,6 +48,5 @@ namespace CppNet {
         quit_ = true;
 
     }
-
 
 }

@@ -10,6 +10,7 @@
 #include "base/Noncopyable.h"
 #include "base/Timestamp.h"
 #include "base/CurrentThread.h"
+#include "net/Channel.h"
 
 namespace CppNet {
     class EventLoop {
@@ -26,6 +27,9 @@ namespace CppNet {
             }
         }
         bool isInLoopThread() const { return threadId_ == CurrentThread::tid(); }
+
+        void updateChannel(Channel* channel);
+        void removeChannel(Channel* channel);
 
     private:
         void abortNotInLoopThread();

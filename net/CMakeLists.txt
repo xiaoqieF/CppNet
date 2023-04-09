@@ -1,4 +1,12 @@
-set(net_src Socket.cc InetAddress.cc Buffer.cc EventLoop.cc)
+set(net_src
+        Socket.cc
+        InetAddress.cc
+        Buffer.cc
+        EventLoop.cc
+        Channel.cc
+        Poller.cc
+        poller/PollPoller.cc
+        poller/EpollPoller.cc)
 
 add_library(net ${net_src})
 target_link_libraries(net logger base)
