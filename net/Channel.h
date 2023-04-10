@@ -29,6 +29,7 @@ namespace CppNet {
         int fd() const { return fd_; }
         int events() const { return events_; }
         void set_revents(int revent) { revents_ = revent; }
+        bool isNoneEvent() const { return events_ == kNoneEvent; }
 
         void enableReading() {
             events_ |= kReadEvent;

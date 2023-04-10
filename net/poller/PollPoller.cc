@@ -2,6 +2,7 @@
 // Created by fxd on 23-4-9.
 //
 
+#include <unistd.h>
 #include "PollPoller.h"
 #include "logger/Logging.h"
 #include "net/Channel.h"
@@ -54,7 +55,9 @@ namespace CppNet {
         } else if (numEvents == 0) {
             LOG_TRACE << "nothing happened";
         } else {
-            LOG_FATAL << "PollPoller::poll";
+            if (errno != EINTR) {
+                LOG_FATAL << "PollPoller::poll";
+            }
         }
         return now;
     }
