@@ -26,7 +26,7 @@ namespace CppNet {
 
     void EpollPoller::updateChannel(Channel *channel) {
         assertInLoopThread();
-        LOG_TRACE << "fd = " << channel->fd() << "events = " << channel->events();
+        LOG_TRACE << "updateChannel, fd = " << channel->fd() << " events = " << channel->events();
         const int idx = channel->index();
         if (idx == kNew || idx == kDeleted) {
             // new channel

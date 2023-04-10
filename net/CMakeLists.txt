@@ -7,7 +7,8 @@ set(net_src
         Poller.cc
         poller/PollPoller.cc
         poller/EpollPoller.cc
-        timer/Timer.cc)
+        timer/Timer.cc
+        timer/TimerQueue.cc)
 
 add_library(net ${net_src})
 target_link_libraries(net logger base)
