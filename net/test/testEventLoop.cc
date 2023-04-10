@@ -22,6 +22,6 @@ int main() {
     CppNet::Channel channel(&loop, 0);
     channel.setReadCallback(std::bind(&handleRead, std::placeholders::_1, channel.fd()));
     channel.enableReading();
-
+    channel.enableWriting();
     loop.loop();
 }
