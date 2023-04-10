@@ -21,6 +21,7 @@ namespace CppNet {
         Channel(EventLoop* loop, int fd);
         ~Channel() = default;
 
+        void handleEvent(Timestamp receiveTime);
         void setReadCallback(const ReadEventCallback& cb) { readCallback_ = cb; }
         void setWriteCallback(const EventCallback& cb) { writeCallback_ = cb; }
         void setCloseCallback(const EventCallback& cb) { closeCallback_ = cb; }

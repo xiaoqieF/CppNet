@@ -6,11 +6,13 @@
 #define CPPNET_EVENTLOOP_H
 
 #include <atomic>
+#include <memory>
 
 #include "base/Noncopyable.h"
 #include "base/Timestamp.h"
 #include "base/CurrentThread.h"
 #include "net/Channel.h"
+#include "net/Poller.h"
 
 namespace CppNet {
     class EventLoop {
@@ -37,6 +39,10 @@ namespace CppNet {
         std::atomic_bool looping_;
         std::atomic_bool quit_;
         const pid_t threadId_;
+
+        std::unique_ptr<Poller> poller_;
+        Timestamp pollReturnTime_;
+        std::vector<Channel*> activeChannels_;
     };
 
 }

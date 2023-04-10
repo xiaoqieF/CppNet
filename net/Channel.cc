@@ -27,4 +27,31 @@ namespace CppNet {
         loop_->removeChannel(this);
     }
 
+    void Channel::handleEvent(Timestamp receiveTime) {
+        if ((revents_ & POLLHUP) && !(revents_ & POLLIN)) {
+            LOG_WARN << "Channel::handleEvent POLLHUP";
+            if (closeCallback_) {
+                closeCallback_();
+            }
+        }
+        if (revents_ & POLLNVAL) {
+            LOG_WARN << "Channel::handleEvent POLLNVAL";
+        }
+        if (revents_ & (POLLERR | POLLNVAL)) {
+            if (errorCallback_) {
+                errorCallback_();
+            }
+        }
+        if (revents_ & (POLLIN | POLLPRI | POLLRDHUP)) {
+            if (readCallback_) {
+                readCallback_(receiveTime);
+            }
+        }
+        if (revents_ & POLLOUT) {
+            if (writeCallback_) {
+                writeCallback_();
+            }
+        }
+    }
+
 }
