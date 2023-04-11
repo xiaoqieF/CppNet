@@ -25,7 +25,7 @@ namespace CppNet {
         void addTimer(const TimerCallback& cb, Timestamp when, double interval);
 
     private:
-        typedef std::pair<Timestamp, std::shared_ptr<Timer>> Entry;
+        typedef std::pair<Timestamp, std::shared_ptr<Timer>> Entry;  // TODO: use unique_ptr
         typedef std::set<Entry> TimerList;
 
         void handleRead();

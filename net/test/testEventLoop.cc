@@ -5,28 +5,18 @@
 #include <thread>
 #include <functional>
 #include <unistd.h>
+#include <vector>
 
-#include "net/EventLoop.h"
 #include "logger/Logging.h"
+#include "net/EventLoopThread.h"
 
-CppNet::EventLoop* g_loop;
-
-void handleRead(CppNet::Timestamp t, int fd) {
-    char buf[64] = {0};
-    ssize_t n = read(fd, buf, sizeof(buf));
-    (void)n;
-    g_loop->runEvery(1, [](){
-        LOG_INFO << "call run after";
-    });
-}
 
 int main() {
     CppNet::Logger::setLogLevel(CppNet::Logger::TRACE);
-    CppNet::EventLoop loop;
-    g_loop = &loop;
-
-    CppNet::Channel channel(&loop, 0);
-    channel.setReadCallback(std::bind(&handleRead, std::placeholders::_1, channel.fd()));
-    channel.enableReading();
-    loop.loop();
+    std::vector<std::unique_ptr<CppNet::EventLoopThread>> vec;
+    for (int i=0; i < 4; ++i) {
+        vec.emplace_back(new CppNet::EventLoopThread);
+        vec[i]->startLoop();
+    }
+    std::this_thread::sleep_for(std::chrono::seconds(200));
 }
