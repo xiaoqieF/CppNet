@@ -18,7 +18,7 @@ namespace CppNet {
     class EventLoopThread : noncopyable {
     public:
         typedef std::function<void(EventLoop*)> ThreadInitCallback;
-        explicit EventLoopThread(ThreadInitCallback  cb = ThreadInitCallback());
+        explicit EventLoopThread(ThreadInitCallback  cb = ThreadInitCallback{});
         ~EventLoopThread();
         EventLoop* startLoop();
 

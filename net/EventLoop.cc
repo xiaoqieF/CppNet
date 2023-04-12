@@ -72,6 +72,8 @@ namespace CppNet {
             }
             doPendingFunctors();
         }
+
+        looping_ = false;
         LOG_TRACE << "EventLoop " << this << " stop looping";
     }
 
