@@ -33,10 +33,11 @@ namespace CppNet {
         }
         bool isInLoopThread() const { return threadId_ == CurrentThread::tid(); }
 
+        // 被 Channel 调用，进而调用 poller 的相关方法
         void updateChannel(Channel* channel);
         void removeChannel(Channel* channel);
 
-        // 在事件循环中立即执行函数 f(wakeup 循环， 并执行函数)
+        // 在事件循环中立即执行函数 f(添加到 pendingFunc 中，wakeup 循环，并执行函数)
         void runInLoop(const Functor& f);
         void queueInLoop(const Functor& f);
 
@@ -59,15 +60,15 @@ namespace CppNet {
 
         std::unique_ptr<Poller> poller_;
         Timestamp pollReturnTime_;
-        std::vector<Channel*> activeChannels_;
+        std::vector<Channel*> activeChannels_;     // 当前有事件发生的 Channel
 
-        std::unique_ptr<TimerQueue> timerQueue_;
+        std::unique_ptr<TimerQueue> timerQueue_;   // 使用 timerfd 和红黑树实现的时间队列
 
-        int wakeupFd_;
+        int wakeupFd_;                             // 使用 eventfd 实现的事件循环唤醒机制
         std::unique_ptr<Channel> wakeupChannel_;
 
         std::mutex functorMutex_;
-        std::vector<Functor> pendingFunctors_;
+        std::vector<Functor> pendingFunctors_;     // 事件循环中等待执行的函数(醒来立即执行)
         std::atomic_bool callingPendingFunctors_;
     };
 

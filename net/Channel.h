@@ -57,6 +57,8 @@ namespace CppNet {
         EventLoop* ownerLoop() { return loop_; }
         void remove();
 
+        std::string reventsToString() const;
+
     private:
         void update();
 

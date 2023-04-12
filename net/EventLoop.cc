@@ -67,6 +67,11 @@ namespace CppNet {
         while (!quit_) {
             activeChannels_.clear();
             pollReturnTime_ = poller_->poll(kPollTimeout, &activeChannels_);
+
+            for (auto c : activeChannels_) {
+                LOG_TRACE << "{" << c->reventsToString() << "}";
+            }
+
             for (auto c : activeChannels_) {
                 c->handleEvent(pollReturnTime_);
             }
@@ -121,6 +126,7 @@ namespace CppNet {
     }
 
     void EventLoop::wakeup() const {
+        LOG_TRACE << "wakeup!";
         uint64_t one = 1;
         ssize_t n = ::write(wakeupFd_, &one, sizeof(one));
         if (n != sizeof(one)) {

@@ -95,7 +95,7 @@ namespace CppNet {
 
     void TimerQueue::addTimer(const TimerQueue::TimerCallback &cb, Timestamp when, double interval) {
         auto timer = std::make_shared<Timer>(cb, when, interval);
-        loop_->runInLoop([this, &timer] (){
+        loop_->runInLoop([this, timer] (){
             addTimerInLoop(timer);
         });
     }

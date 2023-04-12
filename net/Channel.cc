@@ -2,6 +2,7 @@
 // Created by fxd on 23-4-9.
 //
 #include <poll.h>
+#include <sstream>
 
 #include "Channel.h"
 #include "logger/Logging.h"
@@ -52,6 +53,27 @@ namespace CppNet {
                 writeCallback_();
             }
         }
+    }
+
+    std::string Channel::reventsToString() const {
+        std::ostringstream oss;
+        oss << fd_ << ": ";
+        if (revents_ & POLLIN)
+            oss << "IN ";
+        if (revents_ & POLLPRI)
+            oss << "PRI ";
+        if (revents_ & POLLOUT)
+            oss << "OUT ";
+        if (revents_ & POLLHUP)
+            oss << "HUP ";
+        if (revents_ & POLLRDHUP)
+            oss << "RDHUP ";
+        if (revents_ & POLLERR)
+            oss << "ERR ";
+        if (revents_ & POLLNVAL)
+            oss << "NVAL ";
+
+        return oss.str();
     }
 
 }
