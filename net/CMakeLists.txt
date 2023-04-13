@@ -10,7 +10,9 @@ set(net_src
         timer/Timer.cc
         timer/TimerQueue.cc
         EventLoopThread.cc
-        EventLoopThreadPool.cc)
+        EventLoopThreadPool.cc
+        TcpServer.cc
+        Acceptor.cc)
 
 add_library(net ${net_src})
 target_link_libraries(net logger base)
@@ -23,3 +25,6 @@ target_link_libraries(testBuffer net gtest gmock pthread)
 
 add_executable(testEventLoop test/testEventLoop.cc)
 target_link_libraries(testEventLoop net)
+
+add_executable(testAcceptor test/testAcceptor.cc)
+target_link_libraries(testAcceptor net)

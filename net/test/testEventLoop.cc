@@ -29,17 +29,17 @@ int main() {
     CppNet::Logger::setLogLevel(CppNet::Logger::TRACE);
     print();
     EventLoop loop;
-//    loop.runAfter(10, [&loop] { print(&loop); });
+    loop.runAfter(15, [addr = &loop] { print(addr); });  // c++ 14
 
-//    {
-//        printf("Single thread %p:\n", &loop);
-//        EventLoopThreadPool model(&loop);
-//        model.setThreadNum(0);
-//        model.start(init);
-//        assert(model.getNextLoop() == &loop);
-//        assert(model.getNextLoop() == &loop);
-//        assert(model.getNextLoop() == &loop);
-//    }
+    {
+        printf("Single thread %p:\n", &loop);
+        EventLoopThreadPool model(&loop);
+        model.setThreadNum(0);
+        model.start(init);
+        assert(model.getNextLoop() == &loop);
+        assert(model.getNextLoop() == &loop);
+        assert(model.getNextLoop() == &loop);
+    }
 
     {
         printf("Another thread:\n");
@@ -54,18 +54,16 @@ int main() {
         ::sleep(3);
     }
 
-//    {
-//        printf("Three threads:\n");
-//        EventLoopThreadPool model(&loop);
-//        model.setThreadNum(3);
-//        model.start(init);
-//        EventLoop* nextLoop = model.getNextLoop();
-//        nextLoop->runInLoop([nextLoop] { return print(nextLoop); });
-//        assert(nextLoop != &loop);
-//        assert(nextLoop != model.getNextLoop());
-//        assert(nextLoop != model.getNextLoop());
-//        assert(nextLoop == model.getNextLoop());
-//    }
+    printf("Three threads:\n");
+    EventLoopThreadPool model(&loop);
+    model.setThreadNum(3);
+    model.start(init);
+    EventLoop* nextLoop = model.getNextLoop();
+    nextLoop->runInLoop([nextLoop] { return print(nextLoop); });
+    assert(nextLoop != &loop);
+    assert(nextLoop != model.getNextLoop());
+    assert(nextLoop != model.getNextLoop());
+    assert(nextLoop == model.getNextLoop());
 
     loop.loop();
 }
