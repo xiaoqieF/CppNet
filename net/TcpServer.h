@@ -5,6 +5,10 @@
 #ifndef CPPNET_TCPSERVER_H
 #define CPPNET_TCPSERVER_H
 
+#include "base/Noncopyable.h"
+#include "net/Acceptor.h"
+
+
 namespace CppNet {
     class TcpServer {
     public:

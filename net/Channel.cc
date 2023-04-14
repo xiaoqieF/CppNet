@@ -18,7 +18,8 @@ namespace CppNet {
           fd_(fd),
           events_(0),
           revents_(0),
-          index_(-1) {}
+          index_(-1),
+          tied_(false) {}
 
     void Channel::update() {
         loop_->updateChannel(this);
@@ -28,7 +29,44 @@ namespace CppNet {
         loop_->removeChannel(this);
     }
 
+    void Channel::tie(const std::shared_ptr<void> &obj) {
+        tie_ = obj;
+        tied_ = true;
+    }
+
     void Channel::handleEvent(Timestamp receiveTime) {
+        if (tied_) {
+            // 保证持有者还在
+            if (tie_.lock()) {
+                handleEventWithGuard(receiveTime);
+            }
+        } else {
+            handleEventWithGuard(receiveTime);
+        }
+    }
+
+    std::string Channel::reventsToString() const {
+        std::ostringstream oss;
+        oss << fd_ << ": ";
+        if (revents_ & POLLIN)
+            oss << "IN ";
+        if (revents_ & POLLPRI)
+            oss << "PRI ";
+        if (revents_ & POLLOUT)
+            oss << "OUT ";
+        if (revents_ & POLLHUP)
+            oss << "HUP ";
+        if (revents_ & POLLRDHUP)
+            oss << "RDHUP ";
+        if (revents_ & POLLERR)
+            oss << "ERR ";
+        if (revents_ & POLLNVAL)
+            oss << "NVAL ";
+
+        return oss.str();
+    }
+
+    void Channel::handleEventWithGuard(Timestamp receiveTime) {
         if ((revents_ & POLLHUP) && !(revents_ & POLLIN)) {
             LOG_WARN << "Channel::handleEvent POLLHUP";
             if (closeCallback_) {
@@ -53,27 +91,6 @@ namespace CppNet {
                 writeCallback_();
             }
         }
-    }
-
-    std::string Channel::reventsToString() const {
-        std::ostringstream oss;
-        oss << fd_ << ": ";
-        if (revents_ & POLLIN)
-            oss << "IN ";
-        if (revents_ & POLLPRI)
-            oss << "PRI ";
-        if (revents_ & POLLOUT)
-            oss << "OUT ";
-        if (revents_ & POLLHUP)
-            oss << "HUP ";
-        if (revents_ & POLLRDHUP)
-            oss << "RDHUP ";
-        if (revents_ & POLLERR)
-            oss << "ERR ";
-        if (revents_ & POLLNVAL)
-            oss << "NVAL ";
-
-        return oss.str();
     }
 
 }

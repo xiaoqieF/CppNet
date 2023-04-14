@@ -12,7 +12,8 @@ set(net_src
         EventLoopThread.cc
         EventLoopThreadPool.cc
         TcpServer.cc
-        Acceptor.cc)
+        Acceptor.cc
+        TcpConnection.cc)
 
 add_library(net ${net_src})
 target_link_libraries(net logger base)

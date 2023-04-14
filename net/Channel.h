@@ -6,6 +6,7 @@
 #define CPPNET_CHANNEL_H
 
 #include <functional>
+#include <memory>
 
 #include "base/Noncopyable.h"
 #include "base/Timestamp.h"
@@ -32,6 +33,7 @@ namespace CppNet {
         void set_revents(int revent) { revents_ = revent; }
         bool isNoneEvent() const { return events_ == kNoneEvent; }
 
+        void tie(const std::shared_ptr<void>&);
         void enableReading() {
             events_ |= kReadEvent;
             update();
@@ -61,17 +63,21 @@ namespace CppNet {
 
     private:
         void update();
+        void handleEventWithGuard(Timestamp receiveTime);
 
         EventLoop* loop_;
         const int fd_;
         int events_;
         int revents_;
-        int index_;    // 保存自己在 poller 的 fd 列表中的索引，便于查找更新当前 Channel
+        int index_;    // 保存自己在 poller 的 fd 列表中的索引(或当前状态)，便于查找更新当前 Channel
 
         ReadEventCallback readCallback_;
         EventCallback writeCallback_;
         EventCallback closeCallback_;
         EventCallback errorCallback_;
+
+        std::weak_ptr<void> tie_;   // 用于保存 Channel 持有者的弱引用，防止在处理事件时持有者被销毁
+        bool tied_;
 
         static const int kNoneEvent;
         static const int kReadEvent;

@@ -10,7 +10,7 @@
 
 namespace CppNet {
     // index of channel， 用来标志 channel 的行为
-    const int kNew = -1;   // 新 channel，不再 epfd_ 中 且不在 channels_ 中
+    const int kNew = -1;   // 新 channel，不在 epfd_ 中 且不在 channels_ 中
     const int kAdded = 1;  // 已经添加的 channel
     const int kDeleted = 2; // 删除的 channel， 不在 epfd_ 中， 但在 channels_ 中
 
