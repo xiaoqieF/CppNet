@@ -22,6 +22,13 @@ namespace CppNet {
         }
     }
 
+    EventLoop* checkLoopNotNull(EventLoop* loop) {
+        if (loop == nullptr) {
+            LOG_FATAL << "Loop is nullptr";
+        }
+        return loop;
+    }
+
     __thread EventLoop* t_loopInThisThread = nullptr;  // 线程局部变量，记录当前线程是否已经存在 loop
     const int kPollTimeout = 10000;  // ms
 

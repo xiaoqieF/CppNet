@@ -72,6 +72,8 @@ namespace CppNet {
         std::atomic_bool callingPendingFunctors_;
     };
 
+    EventLoop* checkLoopNotNull(EventLoop* loop);
+
 }
 
 #endif //CPPNET_EVENTLOOP_H

@@ -12,12 +12,6 @@
 #include "logger/Logging.h"
 
 namespace CppNet {
-    static EventLoop* checkLoopNotNull(EventLoop* loop) {
-        if (loop == nullptr) {
-            LOG_FATAL << "Loop is nullptr";
-        }
-        return loop;
-    }
 
     TcpConnection::TcpConnection(EventLoop *loop,
                                  std::string name,
