@@ -89,4 +89,8 @@ int main() {
 
 运行截图：  
 
-![](images/1.png)
+![](images/1.png)  
+
+### 参考
+1. [https://github.com/chenshuo/muduo](https://github.com/chenshuo/muduo)   
+2. 《Linux多线程服务端编程》
