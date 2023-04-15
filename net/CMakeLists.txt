@@ -29,3 +29,6 @@ target_link_libraries(testEventLoop net)
 
 add_executable(testAcceptor test/testAcceptor.cc)
 target_link_libraries(testAcceptor net)
+
+add_executable(testTcpServer test/testTcpServer.cc)
+target_link_libraries(testTcpServer net)

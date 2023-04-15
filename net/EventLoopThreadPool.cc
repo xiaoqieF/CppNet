@@ -34,7 +34,7 @@ namespace CppNet {
 
     EventLoop *EventLoopThreadPool::getNextLoop() {
         baseLoop_->assertInLoopThread();
-        EventLoop* loop = baseLoop_;
+        EventLoop* loop = baseLoop_;    // 如果没有 subLoop，则返回 baseLoop
 
         if (!loops_.empty()) {
             // round-robin

@@ -35,9 +35,11 @@ namespace CppNet {
     }
 
     void Channel::handleEvent(Timestamp receiveTime) {
+        std::shared_ptr<void > guard;
         if (tied_) {
-            // 保证持有者还在
-            if (tie_.lock()) {
+            // 保证持有者(TcpConnection)还在
+            guard = tie_.lock();
+            if (guard) {
                 handleEventWithGuard(receiveTime);
             }
         } else {

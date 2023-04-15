@@ -48,6 +48,7 @@ namespace CppNet {
     private:
         void newConnection(int sockfd, const InetAddress& peerAddr);
         void removeConnection(const TcpConnectionPtr& conn);
+        void removeConnectionInLoop(const TcpConnectionPtr& conn);
 
         EventLoop* loop_;
         const std::string hostPort_;

@@ -49,7 +49,7 @@ namespace CppNet {
     void EpollPoller::removeChannel(Channel *channel) {
         assertInLoopThread();
         int fd = channel->fd();
-        LOG_TRACE << "fd = " << fd;
+        LOG_TRACE << "remove channel, fd = " << fd;
         int idx = channel->index();
         channels_.erase(fd);
         if (idx == kAdded) {

@@ -215,7 +215,7 @@ namespace CppNet {
         loop_->assertInLoopThread();
         assert(state_ == kConnecting);
         state_ = kConnected;
-        channel_->tie(shared_from_this());
+        channel_->tie(shared_from_this());   // 防止 TcpConnection 被销毁了， channel_ 还在处理事件
         channel_->enableReading();
 
         connectionCallback_(shared_from_this());

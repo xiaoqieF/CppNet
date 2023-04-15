@@ -86,6 +86,7 @@ namespace CppNet {
         InetAddress localAddr(detail::getLocalAddr(sockfd));
         TcpConnectionPtr conn = std::make_shared<TcpConnection>(ioLoop,
                                             connName, sockfd, localAddr, peerAddr);
+        connections_[connName] = conn;
         conn->setConnectionCallback(connectionCallback_);
         conn->setMessageCallback(messageCallback_);
         conn->setWriteCompleteCallback(writeCompleteCallback_);
@@ -98,6 +99,12 @@ namespace CppNet {
     }
 
     void TcpServer::removeConnection(const TcpConnectionPtr &conn) {
+        loop_->runInLoop([this, conn]() {
+            removeConnectionInLoop(conn);
+        });
+    }
+
+    void TcpServer::removeConnectionInLoop(const TcpConnectionPtr& conn) {
         loop_->assertInLoopThread();
         LOG_INFO << "TcpServer::removeConnectionInLoop [" << name_
                  << "] - connection " << conn->name();
