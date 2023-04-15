@@ -25,7 +25,9 @@ CppNet 一个小型的 C++ 网络库，大部分代码参考陈硕的 muduo 网�
 
 ### 构建项目
 
-先安装 GTest 单元测试框架：[https://github.com/google/googletest](https://github.com/google/googletest)
+先安装 GTest 单元测试框架：[https://github.com/google/googletest](https://github.com/google/googletest).
+
+获取本项目：  
 
 ```shell
 git clone git@github.com:xiaoqieF/CppNet.git
