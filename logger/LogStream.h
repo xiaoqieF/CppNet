@@ -56,7 +56,7 @@ namespace CppNet {
     private:
         static const int kMaxNumericSize = 48;
         template<typename T>
-        void formatInteger(T);  // 这里模板实现不在头文件可以，应该是因为没有其他类外部的访问
+        void formatInteger(T);  // 这里模板实现不在头文件可以，因为没有其他类外部的访问(private的模板函数可以在cpp实现)
         Buffer buffer_;
     };
 
